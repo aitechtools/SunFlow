@@ -1,3 +1,5 @@
+<img width="2074" alt="SunFlow Image" src="https://user-images.githubusercontent.com/65407412/84622752-0c445900-aede-11ea-8ce4-903da112db65.png">
+
 # Design & Optimize your Supply Chain
 
 
