@@ -1,7 +1,7 @@
 #
 # AITPATH   version 1.0 / 14.6.20
 #
-# Copyright (c) 2019-2020, AI-Technologies - Rainer Wallwitz
+# Copyright (c) 2019-2020, AI-Technologies
 # All rights reserved.
 #
 #
