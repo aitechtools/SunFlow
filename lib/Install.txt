@@ -1,0 +1,86 @@
+SunFlow Installation
+====================
+
+SunFlow requires the following steps before usage:
+
+	1) copy 'sunflow.py' into your library directory, which keep your private import libs,
+	2) update your system path to this directory ensuring that import find the SunFlow library,
+	3) set the paths for charts, data and frames and 
+	4) copy the data file from the data folder to your data directory.
+
+These steps are described here.
+
+Step 1
+======
+
+Copy the file 'sunflow.py' to your python library directory. If there is no such directory, create one - for example /py/libs/ and copy 'sunflow.py' into this directory.   
+   
+
+
+Step 2
+======
+Ensure that the path to the library directory can be found by python at the time of import. The easiest way is adapting your path-variable. If this doesn't work or is not applicable, then copy 'aitpath.py' into the following python directory (for example for release 3.7)
+
+	/python3.7/site-packages/IPython/extensions
+
+and modify afterwards the file 'aitpath.py' to your requirements, i.e., set the variable sys_user in function sysUser() to your operating system's user name - for example 'peter' - and add this path to the system's path by
+
+	sys.path.append('/users/'+sys_user+'/Py/libs')
+
+Here you'll find a full implementation as an example. The final definitions inside 'aitpath.py' after modifications could look then as follows:
+
+	def sysUser():
+    	   platform = operatingSystem()
+    	   return 'peter'
+	sys.path.append('/users/'+sys_user+'/Py/Libs')
+
+The function sysUser() and the variable platform must be kept, since they are required later on by SunFlow.
+
+
+Step 3
+======
+
+Adapt SunFlow's paths to your system in two ways: (A) modifying the library file 'sunflow.py' and (2) dynamic setting right after the import. 
+
+Variant A
+---------
+
+At the very beginning of file 'sunflow.py' there are the default paths definitions. Keep in mind that these definitions are relative to your user directory. To change them permanently, redefine the path strings there according to your requirements. The default settings are:
+	#
+	# Path definitions
+	#
+	sunFlowChartPath = 'py/pydata/tempdata/sunflowtemp/'      # path, where graph charts are saved
+	sunFlowFramePath = 'py/pydata/tempdata/sunflowtemp/'      # path, where the result of optimization is saved
+	sunFlowDataPath  = 'py/pydata/datasets/'                  # path, from where freight tables being loaded
+
+Assuming that you create a directory 'sunflow' and within this directory the two directories 'data' and 'charts', then the definitions could look as follows:
+ 
+	#
+	# Path definitions
+	#
+	sunFlowChartPath = 'py/sunflow/charts/'  
+	sunFlowFramePath = 'py/sunflow/data/'   	
+	sunFlowDataPath  = 'py/sunflow/data/'
+
+
+
+
+
+Variant B
+---------
+
+Variant B is the recommended one and doesn't require a modification of the lib's source code. Instead you change the paths at the time of initialization:
+
+	sun = SunFlow(  charts = 'py/sunflow/charts/', 
+		        data   = 'py/sunflow/data/', 
+			frame  = 'py/sunflow/data/')
+
+And of course, you may change them whenever you want inside your program.
+
+
+
+Step 4
+======
+
+Once you have defined your data directory copy the files from repository folder 'data' into your data directory. 
+
