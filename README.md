@@ -16,18 +16,18 @@ SunFlow got powerful graphics. Your network can be displayed at any time. Have a
 
 <img width="977" alt="Taycan Graph" src="https://user-images.githubusercontent.com/65407412/84750084-22741700-afbb-11ea-97f2-b9e38b627480.png">
 
-Once you got the network, you execute the potential flows to identify the cost-optimal flow, i.e. you optimize it. Our optimized network is shown below.
+Once you got the network, execute its potential flows to identify the cost-optimal paths, i.e. optimize it. The optimized network is shown below.
 
 <img width="996" alt="Taycan Opt" src="https://user-images.githubusercontent.com/65407412/84750108-29028e80-afbb-11ea-85f3-daf695d87633.png">
 
-The optimized model shows active (blue) and inactive flows (gray) as well as active participants (gray boxes) and inactive participants (white boxes). In complex models this could be confusing. This is why SunFlow offers an option to display only those vertices and edge, which have an active flow (see below) in the optimized model.
+The optimized model above shows active (blue) and inactive flows (gray) as well as active participants (gray boxes) and inactive participants (white boxes). In complex models this could be confusing. This is why SunFlow offers an option to display only those vertices and edges, which have an active flow in its optimized model (see below).
 
 <img width="1014" alt="Taycan Opt Flow Only" src="https://user-images.githubusercontent.com/65407412/84750118-2dc74280-afbb-11ea-9877-ecbfe2602e4e.png">
 
 Network Compiler
 ----------------
 
-SunFlow's supply networks are build up in a way Supply Chain Architects think: in terms of components, materials, products, suppliers, plants, assembly lines, reactors, warehouses, distribution centers, customers, markets,...  The above shown illustrations are made by the Python example below.
+SunFlow's supply networks are build up in a way Supply Chain Architects think: in terms of components, materials, products, suppliers, plants, assembly lines, reactors, warehouses, distribution centers, customers, markets,...  The above shown charts are made by the Python code example below.
 
 <img width="978" alt="Taycan Code" src="https://user-images.githubusercontent.com/65407412/84750127-328bf680-afbb-11ea-86bd-14d12103838c.png">
 
