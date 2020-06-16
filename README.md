@@ -18,7 +18,7 @@ Powerful Graphics
 
 SunFlow got powerful graphics. Your network can be displayed at any time. Have a look on the artificial and schematic assembly of a Porsche Taycan electric as an example. First you graph the network with all potential connections and definitions for cost, freight, capacities, products, components, suppliers, plants, distribution centers and customers or markets.
 
-
+<img width="977" alt="Taycan Graph" src="https://user-images.githubusercontent.com/65407412/84750084-22741700-afbb-11ea-97f2-b9e38b627480.png">
 
 Once you got the network, you execute the potential flows to identify the cost-optimal flow, i.e. you optimize it. Our optimized network is shown below.
 
