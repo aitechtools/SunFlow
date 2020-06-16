@@ -1001,6 +1001,8 @@ class Material(Entity):
     #
     # Methoden von SupplyNet werden mittels _currentNet.net() auf die Objekte vom Typ Material abgebildet
     #
+    def part(self,title=None): return self.raw(title=title)
+    def component(self,title=None): return self.raw(title=title)
     def raw(self,title=None):
         if _currentNet.net() != None: 
             return _currentNet.net().raw(self).title(title) if title != None else _currentNet.net().raw(self)
@@ -1015,7 +1017,7 @@ class Material(Entity):
     def warehouse(self,*bkwrdNodes): return self.distribution(*bkwrdNodes)
     def manufacturing(self,*bkwrdNodes): return self.distribution(*bkwrdNodes)
         
-        
+class Component(Material): pass        
         
 # -----------------------------------------------
 # Product
@@ -1039,6 +1041,7 @@ class Product(Material):
         print('not allowed for Products')
         return _currentNet.net()
         
+    def component(self,mat,qnty): return self.ingredient(mat,qnty)
     def ingr(self,mat,qnty): return self.ingredient(mat,qnty)
     def ingredient(self,mat,qnty): 
         # falls mat ein Substitut ist, wird immer das Original benutzt
@@ -1080,6 +1083,8 @@ class Product(Material):
     def blend(self,*bkwrdNodes):        return self.production(*bkwrdNodes)
     def mill(self,*bkwrdNodes):         return self.production(*bkwrdNodes)
     def produce_with(self,*bkwrdNodes): return self.production(*bkwrdNodes)
+    def assemble_with(self,*bkwrdNodes): return self.production(*bkwrdNodes)
+    def assembly(self,*bkwrdNodes): return self.production(*bkwrdNodes)
     
     # -------------------------------------------
    
@@ -1538,6 +1543,9 @@ class SupplyNet(Entity):
         self._graphCount = 0
         self._autoGraph = 0
         
+        self._quantityUnit = 't'#'pcs' #'t' 
+        self._currencyUnit = '€'#'usd' #'€'
+        
         self._debug = False
         self._display = False
         self._showTitle = True
@@ -1603,6 +1611,16 @@ class SupplyNet(Entity):
                     enty.show('   ')
     #"""
     
+    def quantityUnit(self, unit=''):
+        if unit=='': return self._quantityUnit
+        self._quantityUnit = unit
+        return self
+    
+    def currencyUnit(self, unit=''):
+        if unit=='': return self._currencyUnit
+        self._currencyUnit = unit
+        return self
+    
     # ------------ view the net graphical --------------
     
     def graph(self): return self._graph
@@ -1643,10 +1661,9 @@ class SupplyNet(Entity):
             name = self.name()+'_{}'.format(self._graphCount) if name == None else name
             name += '_opt' if optimized else ''
             name += '_flow' if showOptimizedFlowOnly else ''#'_net'
-            g = Graph(name, optimized=optimized, showOptimizedFlowOnly=showOptimizedFlowOnly, rankdir=orient)
+            g = Graph(name, optimized=optimized, showOptimizedFlowOnly=showOptimizedFlowOnly, rankdir=orient, parent_self=self)
             self._graph = g
             self._graphCount += 1
-            
             g.fontsize(6,'raw')
             g.fontsize(6,'producer')
             g.fontsize(6,'distributor')
@@ -1871,6 +1888,7 @@ class SupplyNet(Entity):
     def mill(self,*bkwrdNodes):              return self.manufacturing(*bkwrdNodes)
     def fill(self,*bkwrdNodes):              return self.manufacturing(*bkwrdNodes)
     def assemble(self,*bkwrdNodes):          return self.manufacturing(*bkwrdNodes)
+    def assembly(self,*bkwrdNodes):          return self.manufacturing(*bkwrdNodes)
     
     def production(self,product,*bkwrdNodes): return self._manuf_production(Supplier(),product,*bkwrdNodes)
     #
@@ -2879,7 +2897,7 @@ class Graph:
     def __str__(self): return "<Class '{}'|{}>".format(self.__class__.__name__,self.name())  
     def show(self): print('{}'.format(self.name())); return self
     
-    def __init__(self, name, directory='', cleanup=True, size=10, rankdir='LR', optimized=False, showOptimizedFlowOnly=False ):    #r ankdir='LR', 'TB', 'BT', 'RL'
+    def __init__(self, name, directory='', cleanup=True, size=10, rankdir='LR', optimized=False, showOptimizedFlowOnly=False, parent_self=None ):    #r ankdir='LR', 'TB', 'BT', 'RL'
         self._name = name
         self._directory = directory if directory != '' else System.buildPath()
         
@@ -2942,16 +2960,15 @@ class Graph:
         self._distributorFillcolorHasFlow = 'lightgray'#'cyan'
         self._distributorColorHasFlow = 'gray' #'blue'
         
-        self._qntyUnit = 't'
-        self._currency = '€'
+        self._qntyUnit = parent_self.quantityUnit() #'t' 
+        self._currency = parent_self.currencyUnit() #'€'
         self._unitCost = self._currency+'/'+self._qntyUnit
-        self._edgeIntNumberFormat = '{:6}'
-        self._edgeFloatNumberFormat = '{}'
+        self._edgeIntNumberFormat = '{:6} '
+        self._edgeFloatNumberFormat = '{} '
         
         self._optimized = optimized  # default=False: nur Darstellung des Flownets 
                                      # True: Darstellung eines Optimierungsergebnisses
-        
-        
+    
     def optimized(self): return self._optimized   
     def name(self): return self._name
     def filename(self): return self._filename
@@ -3067,7 +3084,7 @@ class Graph:
             label += self._capaText+'{} '.format(capa)+self._qntyUnit if capa != -1 else ''
         if demand > 0:
             isInt,demand = self.smartRound(demand)
-            label += self._demandText+'{}'.format(demand)+self._qntyUnit if demand != -1 else ''
+            label += self._demandText+'{} '.format(demand)+self._qntyUnit if demand != -1 else ''
         if vc > 0 and self._showVar:
             isInt,vc = self.smartRound(vc)
             sVarText = self._varText if typ=='' else self._varTextRaw
@@ -3166,7 +3183,7 @@ class Graph:
         else:
             label = ''
         if freight > 0 and self._showFreightEdge:
-            label += '\n{}'.format(int(freight))+self._unitCost if freight != -1 else ''
+            label += '\n'+self._edgeIntNumberFormat.format(int(freight))+self._unitCost if freight != -1 else ''
        
         penwidth = calcPenwidth(quantity) if self.optimized() else self._defPenWidthNotOptimized
         return self.edge(fromNode, toNode, label=label, arrowsize=1, headlabel='', taillabel='', penwidth=penwidth,quantity=quantity)
