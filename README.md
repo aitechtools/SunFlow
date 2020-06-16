@@ -22,6 +22,7 @@ SunFlow got powerful graphics. Your network can be displayed at any time. Have a
 
 Once you got the network, you execute the potential flows to identify the cost-optimal flow, i.e. you optimize it. Our optimized network is shown below.
 
+<img width="996" alt="Taycan Opt" src="https://user-images.githubusercontent.com/65407412/84750108-29028e80-afbb-11ea-85f3-daf695d87633.png">
 
 The optimized model shows active (blue) and inactive flows (gray) as well as active participants (gray boxes) and inactive participants (white boxes). In complex models this could be confusing. This is why SunFlow offers an option to display only those vertices and edge, which have an active flow (see below) in the optimized model.
 
